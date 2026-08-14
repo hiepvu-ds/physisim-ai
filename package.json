@@ -4,11 +4,14 @@
   "description": "PhysiSim AI — Multi-Physics Simulation Platform (Zero-CAPEX)",
   "homepage": "https://github.com/your-username/physisim-ai",
   "scripts": {
-    "dev": "cd frontend && npx live-server . --port=3000 --open=index.html",
-    "lint": "echo 'Add ESLint config for JS linting'",
+    "dev": "npx -y serve frontend -p 3000",
+    "preview": "npx -y serve frontend -p 3000",
+    "deploy:vercel": "cd frontend && npx -y vercel --prod",
+    "deploy:gh-pages": "npx -y gh-pages -d frontend",
+    "test": "pytest backend/tests/test_api.py -v",
     "docs": "echo 'Docs available in /docs folder'"
   },
-  "keywords": ["robotics", "simulation", "physical-ai", "synthetic-data", "three.js", "fastapi"],
+  "keywords": ["robotics", "simulation", "physical-ai", "synthetic-data", "three.js", "fastapi", "colab", "vercel"],
   "author": "PhysiSim AI Team",
   "license": "MIT"
 }
