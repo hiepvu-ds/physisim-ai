@@ -1,0 +1,14 @@
+{
+  "name": "physisim-ai",
+  "version": "1.0.0",
+  "description": "PhysiSim AI — Multi-Physics Simulation Platform (Zero-CAPEX)",
+  "homepage": "https://github.com/your-username/physisim-ai",
+  "scripts": {
+    "dev": "cd frontend && npx live-server . --port=3000 --open=index.html",
+    "lint": "echo 'Add ESLint config for JS linting'",
+    "docs": "echo 'Docs available in /docs folder'"
+  },
+  "keywords": ["robotics", "simulation", "physical-ai", "synthetic-data", "three.js", "fastapi"],
+  "author": "PhysiSim AI Team",
+  "license": "MIT"
+}
