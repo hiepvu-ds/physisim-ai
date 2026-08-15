@@ -375,13 +375,42 @@ async def export_dataset(req: ExportRequest):
         raise HTTPException(status_code=400, detail=f"Unknown format: {req.format}")
 
 
+def get_data_dir() -> str:
+    """Returns persistent data directory (Google Drive mount or local storage)."""
+    d = os.getenv("PHYSISIM_DATA_DIR", "/tmp/physisim_data")
+    os.makedirs(d, exist_ok=True)
+    return d
+
+
+def auto_sync_to_huggingface(file_path: str):
+    """Auto syncs exported file to Hugging Face Hub dataset repo if credentials exist."""
+    hf_token = os.getenv("HF_TOKEN")
+    hf_repo = os.getenv("HF_REPO_ID")
+    if hf_token and hf_repo:
+        try:
+            from huggingface_hub import HfApi
+            api = HfApi()
+            api.create_repo(repo_id=hf_repo, repo_type="dataset", token=hf_token, exist_ok=True)
+            target_name = os.path.basename(file_path)
+            api.upload_file(
+                path_or_fileobj=file_path,
+                path_in_repo=f"data/{target_name}",
+                repo_id=hf_repo,
+                repo_type="dataset",
+                token=hf_token
+            )
+        except Exception:
+            pass
+
+
 async def _export_lerobot():
     """Export to LeRobot HDF5 format."""
     try:
         import h5py
         import numpy as np
 
-        filename = f"/tmp/physisim_dataset_{int(time.time())}.h5"
+        data_dir = get_data_dir()
+        filename = os.path.join(data_dir, f"physisim_dataset_{int(time.time())}.h5")
         with h5py.File(filename, "w") as f:
             obs = f.create_group("observations")
             acts = f.create_group("actions")
@@ -404,6 +433,7 @@ async def _export_lerobot():
             f.attrs["format_version"] = "lerobot_v1"
 
         basename = os.path.basename(filename)
+        auto_sync_to_huggingface(filename)
         return {
             "success": True,
             "file_path": filename,
@@ -417,7 +447,8 @@ async def _export_lerobot():
 async def _export_rlds():
     """Export to RLDS (RL Unplugged / Google DeepMind Standard JSON-L format)."""
     import json
-    filename = f"/tmp/physisim_rlds_{int(time.time())}.jsonl"
+    data_dir = get_data_dir()
+    filename = os.path.join(data_dir, f"physisim_rlds_{int(time.time())}.jsonl")
     
     steps_data = []
     for idx, s in enumerate(sim_state.trajectory_buffer):
@@ -437,6 +468,7 @@ async def _export_rlds():
             f.write(json.dumps(step) + "\n")
             
     basename = os.path.basename(filename)
+    auto_sync_to_huggingface(filename)
     return {
         "success": True,
         "file_path": filename,
@@ -449,7 +481,8 @@ async def _export_rlds():
 async def _export_ros2():
     """Export to ROS2 Message Bag JSON log (compatible with rosbag2_transport / webviz)."""
     import json
-    filename = f"/tmp/physisim_ros2_{int(time.time())}.json"
+    data_dir = get_data_dir()
+    filename = os.path.join(data_dir, f"physisim_ros2_{int(time.time())}.json")
     
     ros2_bag = {
         "topic": "/franka/state",
@@ -474,6 +507,7 @@ async def _export_ros2():
         json.dump(ros2_bag, f, indent=2)
         
     basename = os.path.basename(filename)
+    auto_sync_to_huggingface(filename)
     return {
         "success": True,
         "file_path": filename,
@@ -481,6 +515,7 @@ async def _export_ros2():
         "steps": len(sim_state.trajectory_buffer),
         "format": "ros2_json_bag"
     }
+
 
 
 class HuggingFaceUploadRequest(BaseModel):
@@ -595,10 +630,15 @@ async def download_dataset(filename: str):
     import os
     from fastapi.responses import FileResponse
 
-    path = os.path.join("/tmp", filename)
+    data_dir = get_data_dir()
+    path = os.path.join(data_dir, filename)
     if not os.path.exists(path):
-        raise HTTPException(status_code=404, detail="File not found or expired.")
+        # Fallback to /tmp
+        path = os.path.join("/tmp", filename)
+        if not os.path.exists(path):
+            raise HTTPException(status_code=404, detail="File not found or expired.")
     return FileResponse(path, filename=filename, media_type="application/x-hdf5")
+
 
 @app.get("/api/buffer", tags=["Data"])
 async def get_buffer_info():
