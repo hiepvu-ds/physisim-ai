@@ -41,12 +41,15 @@ cd frontend
 | Hosting | Vercel / Cloudflare Pages | Free |
 | Storage | HuggingFace Hub | Free |
 
-## 📋 Tài Liệu
+## 📋 Tài Liệu & Đầu Tư
 
-- [Software Requirements Specification](docs/srs/SRS.md)
-- [PM Plan](docs/PM_PLAN.md)
-- [API Reference](docs/api/API_REFERENCE.md)
+- 📄 [**Đặc Tả Chức Năng Cốt Lõi (Functional Specification v2.0)**](docs/FUNCTIONAL_SPECIFICATION.md)
+- 💼 [**Bản Thuyết Trình Gọi Vốn Pre-Seed (Pitch Deck 12 Slides)**](docs/PITCH_DECK_PRESEED.md)
+- 📐 [Software Requirements Specification (SRS)](docs/srs/SRS.md)
+- 🗺️ [PM Implementation Plan](docs/PM_PLAN.md)
+- 🔌 [API Reference](docs/api/API_REFERENCE.md)
 
 ---
 
-*PhysiSim AI © 2026*
+*PhysiSim AI © 2026 — The Zero-CAPEX Synthetic Data & Simulation Cloud for Physical AI*
+
