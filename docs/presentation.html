@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhysiSim AI — Pre-Seed Pitch Deck & Master Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #060913;
+      --bg-card: rgba(13, 20, 36, 0.75);
+      --bg-card-hover: rgba(20, 30, 55, 0.85);
+      --border-subtle: rgba(0, 242, 254, 0.15);
+      --border-glow: rgba(0, 242, 254, 0.4);
+      --primary-cyan: #00f2fe;
+      --primary-purple: #7f00ff;
+      --accent-neon: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-red: #ef4444;
+      --text-bright: #ffffff;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(127, 0, 255, 0.09) 0%, transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── Top Navbar ─── */
+    header.deck-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      background: rgba(6, 9, 19, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary-cyan), var(--primary-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+    .brand-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-bright);
+      letter-spacing: -0.5px;
+    }
+    .brand-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      color: var(--primary-cyan);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .nav-tab-btn {
+      padding: 8px 18px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-tab-btn:hover {
+      color: var(--text-bright);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .nav-tab-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(127, 0, 255, 0.25));
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-action-primary {
+      padding: 8px 18px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary-cyan), var(--primary-purple));
+      color: #000;
+      font-weight: 700;
+      font-size: 0.82rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-action-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+    }
+
+    /* ─── Container ─── */
+    .app-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    /* ─── SECTION 1: PITCH DECK SLIDER ─── */
+    .deck-viewport {
+      display: block;
+    }
+    .slide-card-wrapper {
+      position: relative;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .slide-card-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--primary-cyan), var(--primary-purple), var(--accent-neon));
+    }
+
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .slide-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary-cyan);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .slide-title {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--text-bright);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+    .slide-counter-badge {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Grid Layouts inside slides */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glow);
+      transform: translateY(-3px);
+    }
+    .card-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .metric-box {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.05), rgba(127, 0, 255, 0.08));
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+    .metric-val {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--primary-cyan);
+      line-height: 1;
+      margin-bottom: 6px;
+      text-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
+    }
+    .metric-lbl {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    /* Slider Controls */
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding: 0 8px;
+    }
+    .slide-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .slide-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .slide-dot.active {
+      width: 32px;
+      border-radius: 10px;
+      background: var(--primary-cyan);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.6);
+    }
+    .btn-nav-slide {
+      padding: 10px 22px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-bright);
+      font-family: var(--font-heading);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-nav-slide:hover {
+      background: rgba(0, 242, 254, 0.15);
+      border-color: var(--primary-cyan);
+      color: var(--primary-cyan);
+    }
+
+    /* ─── SECTION 2: INTERACTIVE FLOWCHARTS ─── */
+    .flowchart-section {
+      margin-top: 48px;
+    }
+    .section-headline {
+      font-family: var(--font-heading);
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--text-bright);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 28px;
+    }
+
+    .flow-diagram-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 36px;
+      margin-bottom: 32px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    }
+
+    /* SVG Flowchart Elements */
+    .flow-step-node {
+      background: rgba(13, 22, 45, 0.9);
+      border: 1.5px solid rgba(0, 242, 254, 0.35);
+      border-radius: 14px;
+      padding: 18px 22px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .flow-step-node:hover {
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+      transform: translateY(-2px);
+    }
+    .flow-step-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--primary-cyan);
+      margin-bottom: 4px;
+    }
+    .flow-step-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 6px;
+    }
+    .flow-step-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-cyan);
+      font-size: 20px;
+      font-weight: bold;
+      animation: pulseArrow 1.8s infinite;
+    }
+    @keyframes pulseArrow {
+      0%, 100% { transform: translateX(0); opacity: 0.6; }
+      50% { transform: translateX(6px); opacity: 1; }
+    }
+
+    /* ─── SECTION 3: COMPREHENSIVE DOCUMENTATION ─── */
+    .doc-chapter {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 36px;
+      margin-bottom: 28px;
+    }
+    .doc-chapter-title {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary-cyan);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.88rem;
+    }
+    .doc-table th {
+      background: rgba(0, 242, 254, 0.08);
+      color: var(--primary-cyan);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+    }
+    .doc-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+    .doc-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .badge-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(0, 242, 254, 0.15);
+      color: var(--primary-cyan);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+    }
+
+    /* Code Block */
+    .code-block {
+      background: #020409;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      margin: 14px 0;
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    footer.deck-footer {
+      text-align: center;
+      padding: 32px 0;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2col, .grid-3col, .grid-4col { grid-template-columns: 1fr; }
+      .slide-card-wrapper { padding: 28px 20px; min-height: auto; }
+      .slide-title { font-size: 1.6rem; }
+      .nav-tabs { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── TOP NAVBAR ─── -->
+  <header class="deck-nav">
+    <div class="brand-group">
+      <div class="brand-logo">⚛</div>
+      <div class="brand-title">PhysiSim AI</div>
+      <span class="brand-badge">Pre-Seed Pitch Deck & Docs</span>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab-btn active" id="tabBtn-pitch" onclick="switchView('pitch')">💼 Pitch Deck (12 Slides)</button>
+      <button class="nav-tab-btn" id="tabBtn-flow" onclick="switchView('flow')">📊 Sơ Đồ Kiến Trúc & Luồng</button>
+      <button class="nav-tab-btn" id="tabBtn-doc" onclick="switchView('doc')">📖 Đặc Tả Chức Năng (Docs)</button>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="../frontend/index.html" class="btn-action-primary" target="_blank">🎮 Mở App Live Demo</a>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- ══════════════════════════════════════════════════════════
+         VIEW 1: INTERACTIVE PITCH DECK SLIDER (12 SLIDES)
+         ══════════════════════════════════════════════════════════ -->
+    <section id="view-pitch" class="deck-viewport">
+      
+      <!-- Dynamic Slide Card -->
+      <div class="slide-card-wrapper" id="slideCard">
+        <!-- Content will be injected by JavaScript -->
+      </div>
+
+      <!-- Slider Controls -->
+      <div class="deck-controls">
+        <button class="btn-nav-slide" onclick="prevSlide()">← Slide Trước</button>
+        <div class="slide-dots" id="slideDotsContainer"></div>
+        <button class="btn-nav-slide" onclick="nextSlide()">Slide Tiếp →</button>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         VIEW 2: INTERACTIVE FLOWCHARTS & DATA PIPELINE
+         ══════════════════════════════════════════════════════════ -->
+    <section id="view-flow" style="display:none;" class="flowchart-section">
+      <div class="section-headline">📊 Sơ Đồ Kiến Trúc & Luồng Xử Lý Của PhysiSim AI</div>
+      <div class="section-sub">Mô hình hóa toàn bộ quy trình từ dựng cảnh 3D, thu thập dữ liệu đa vật lý, đến huấn luyện AI và đồng bộ Hugging Face Hub.</div>
+
+      <!-- Flowchart 1: Zero-CAPEX Cloud Pipeline -->
+      <div class="flow-diagram-card">
+        <div class="card-title" style="color:var(--primary-cyan); margin-bottom:18px; font-size:1.2rem;">
+          🔄 1. Luồng Thu Thập Dữ Liệu & Điện Toán Đám Mây Zero-CAPEX
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr; gap:12px; align-items:center;">
+          
+          <div class="flow-step-node">
+            <div class="flow-step-num">BƯỚC 01</div>
+            <div class="flow-step-title">🌐 Web UI Three.js</div>
+            <div class="flow-step-desc">Người dùng điều khiển 6DoF Robot & Dựng Scene 35+ vật thể tại 60 FPS trên trình duyệt.</div>
+          </div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-step-node">
+            <div class="flow-step-num">BƯỚC 02</div>
+            <div class="flow-step-title">⚡ Cloud Tunneling</div>
+            <div class="flow-step-desc">Truyền lệnh Cartesian & Joint qua ngrok / Cloudflare Quick Tunnel (độ trễ ~30ms).</div>
+          </div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-step-node">
+            <div class="flow-step-num">BƯỚC 03</div>
+            <div class="flow-step-title">🦾 MuJoCo GPU Solver</div>
+            <div class="flow-step-desc">Colab GPU T4 tính toán va chạm, giải FK/IK, xuất lực Tactile Force & Offscreen Wrist Cam.</div>
+          </div>
+
+          <div class="flow-arrow">➔</div>
+
+          <div class="flow-step-node">
+            <div class="flow-step-num">BƯỚC 04</div>
+            <div class="flow-step-title">🤗 Hugging Face Sync</div>
+            <div class="flow-step-desc">Xuất file LeRobot HDF5 / RLDS, tự động lưu Google Drive và push lên Hugging Face Hub.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Flowchart 2: Scene Generation to Policy Rollout Loop -->
+      <div class="flow-diagram-card">
+        <div class="card-title" style="color:var(--primary-purple); margin-bottom:18px; font-size:1.2rem;">
+          🧠 2. Chu Trình Dựng Cảnh ➔ Huấn Luyện AI ➔ Rollout Kiểm Thử (Closed-Loop)
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px;">
+          
+          <div class="flow-step-node" style="border-color:rgba(127,0,255,0.4);">
+            <div class="flow-step-num" style="color:var(--primary-purple);">STAGE A</div>
+            <div class="flow-step-title">🏗️ 3D Scene Builder</div>
+            <div class="flow-step-desc">Xếp đặt bàn ghế, máy móc, gán vật liệu Metal/Glass/Wood, chỉnh ma sát $\mu$ và khối lượng $m$.</div>
+          </div>
+
+          <div class="flow-step-node" style="border-color:rgba(0,242,254,0.4);">
+            <div class="flow-step-num">STAGE B</div>
+            <div class="flow-step-title">📊 Synthetic Recording</div>
+            <div class="flow-step-desc">Ghi nhận chuỗi quỹ đạo: Pose $X,Y,Z$, góc quay RPY, lực kẹp, hình ảnh Wrist Cam $280\times140$.</div>
+          </div>
+
+          <div class="flow-step-node" style="border-color:rgba(16,185,129,0.4);">
+            <div class="flow-step-num" style="color:var(--accent-neon);">STAGE C</div>
+            <div class="flow-step-title">🧠 Behavioral Cloning</div>
+            <div class="flow-step-desc">Huấn luyện mạng nơ-ron Imitation Learning / Diffusion Policy trực tiếp trên GPU Colab.</div>
+          </div>
+
+          <div class="flow-step-node" style="border-color:rgba(245,158,11,0.4);">
+            <div class="flow-step-num" style="color:var(--accent-amber);">STAGE D</div>
+            <div class="flow-step-title">🎬 Rollout & Ghosting</div>
+            <div class="flow-step-desc">Policy tự hành gắp vật thể, kiểm tra Domain Randomization, hiển thị đường quỹ đạo 3D ribbon.</div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         VIEW 3: MASTER FUNCTIONAL DOCUMENTATION (DETAILED DOCS)
+         ══════════════════════════════════════════════════════════ -->
+    <section id="view-doc" style="display:none;" class="flowchart-section">
+      <div class="section-headline">📖 Đặc Tả Chức Năng Cốt Lõi (Functional Specification v2.0)</div>
+      <div class="section-sub">Tài liệu chi tiết các phân hệ phần mềm của PhysiSim AI phục vụ nghiên cứu và triển khai sản xuất.</div>
+
+      <!-- Chapter 1 -->
+      <div class="doc-chapter">
+        <div class="doc-chapter-title">🎮 1. Phân Hệ Simulation Studio & Điều Khiển Robot</div>
+        <p>Cung cấp giao diện tương tác 3D WebGL trực quan cho phép người dùng điều khiển và quan sát phản hồi cảm biến từ robot:</p>
+        <table class="doc-table">
+          <thead>
+            <tr><th>Chức Năng</th><th>Mô Tả Kỹ Thuật</th><th>Phạm Vi / Đơn Vị</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Cartesian 6DoF Control</strong></td>
+              <td>Điều khiển vị trí không gian và góc xoay Euler của End-Effector qua Forward/Inverse Kinematics.</td>
+              <td><span class="badge-pill">Pos: -2.0m ~ +2.0m</span> <span class="badge-pill">RPY: -180° ~ +180°</span></td>
+            </tr>
+            <tr>
+              <td><strong>Joint Space Control</strong></td>
+              <td>Điều khiển độc lập 7 khớp $q_1 \dots q_7$ theo đúng giới hạn vật lý của Franka Emika Panda.</td>
+              <td><span class="badge-pill">q1-q7 Hardware Limits</span></td>
+            </tr>
+            <tr>
+              <td><strong>Tactile Force Telemetry</strong></td>
+              <td>Vẽ đồ thị lực tiếp xúc thời gian thực (rolling window 30 điểm đo) qua Chart.js.</td>
+              <td><span class="badge-pill">0 ~ 10.0 Newton</span></td>
+            </tr>
+            <tr>
+              <td><strong>Wrist Cam RGB-D Stream</strong></td>
+              <td>Stream hình ảnh từ camera gắn trên cổ tay robot, kết xuất từ MuJoCo offscreen renderer.</td>
+              <td><span class="badge-pill">280×140 Base64 JPEG</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Chapter 2 -->
+      <div class="doc-chapter">
+        <div class="doc-chapter-title">🏗️ 2. Phân Hệ Dedicated Scene Studio & Kho 35+ Đối Tượng</div>
+        <p>Thư viện đối tượng 3D đa ngành hỗ trợ sinh môi trường thực tế không cần tải file nặng từ bên ngoài:</p>
+        <div class="grid-3col" style="margin-top:14px;">
+          <div class="feature-card">
+            <div class="card-title">🏫 Trường Học (School)</div>
+            <div class="card-desc">Bàn học sinh, ghế tựa cong, bàn giáo viên, bảng xanh viết phấn, giá sách 3 tầng, máy chiếu, laptop, cặp sách, chồng sách vở.</div>
+          </div>
+          <div class="feature-card">
+            <div class="card-title">🏥 Bệnh Viện (Hospital)</div>
+            <div class="card-desc">Giường bệnh viện, máy monitor tim mạch phát sáng, trụ truyền dịch IV, xe đẩy thuốc inox, đèn mổ phẫu thuật, cáng, tủ thuốc kính.</div>
+          </div>
+          <div class="feature-card">
+            <div class="card-title">🏭 Nhà Máy & Kho (Factory)</div>
+            <div class="card-desc">Băng chuyền sản xuất có chân đỡ, pallet gỗ tiêu chuẩn EU, kệ kho hàng 3 tầng, thùng carton, thùng phi hóa chất, xe nâng tay, hàng rào.</div>
+          </div>
+          <div class="feature-card">
+            <div class="card-title">🧪 Phòng Lab & Bếp (Lab)</div>
+            <div class="card-desc">Bàn thí nghiệm chống acid, kính hiển vi quang học, máy ly tâm tách mẫu, giá ống nghiệm đa màu, quầy bếp, tủ lạnh bảo quản.</div>
+          </div>
+          <div class="feature-card">
+            <div class="card-title">🧱 Kiến Trúc (Architecture)</div>
+            <div class="card-desc">Tường bê tông, tường có cửa sổ kính, khung cửa phòng mở rộng, vách kính cách ly trong suốt, cột trụ chịu lực.</div>
+          </div>
+          <div class="feature-card">
+            <div class="card-title">📐 Hình Học Cơ Bản (Shapes)</div>
+            <div class="card-desc">Khối hộp (Cube Box), Khối cầu (Sphere), Khối trụ (Cylinder), Khối con nhộng (Capsule), Khối nón chóp (Cone).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chapter 3 -->
+      <div class="doc-chapter">
+        <div class="doc-chapter-title">📊 3. Phân Hệ Xuất Dữ Liệu & Hugging Face Hub Auto-Sync</div>
+        <p>Hỗ trợ xuất chuẩn dữ liệu quốc tế phục vụ các mô hình AI tiên tiến nhất hiện nay:</p>
+        <div class="code-block">
+# Định dạng LeRobot HDF5 (.h5) được xuất tự động:
+dataset.h5
+├── observations/
+│   ├── end_effector_pose  (N, 3) float32 [X, Y, Z]
+│   ├── joint_angles       (N, 7) float32 [q1...q7]
+│   ├── tactile_force      (N, 1) float32 [Force N]
+│   └── gripper            (N, 1) float32 [0.0 - 1.0]
+└── actions/
+    └── cartesian_pos      (N, 3) float32 [Pos Action]
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="deck-footer">
+    <div><strong>PhysiSim AI</strong> — The Zero-CAPEX Synthetic Data & Simulation Cloud for Physical AI</div>
+    <div style="margin-top:6px; font-size:0.75rem; color:#64748b;">© 2026 PhysiSim AI Team. Built with Three.js, FastAPI & MuJoCo.</div>
+  </footer>
+
+  <!-- ─── JAVASCRIPT SLIDE ENGINE ─── -->
+  <script>
+    const SLIDES_DATA = [
+      {
+        tag: "SLIDE 01 // TẦM NHÌN & TỔNG QUAN",
+        title: "PhysiSim AI — The Zero-CAPEX Synthetic Data Cloud",
+        content: `
+          <div class="grid-2col">
+            <div>
+              <p style="font-size:1.15rem; color:var(--text-bright); margin-bottom:18px; font-weight:600;">
+                Dân chủ hóa quá trình huấn luyện Robot Manipulation bằng nền tảng giả lập đa vật lý trên trình duyệt với chi phí <strong style="color:var(--primary-cyan);">0 VNĐ</strong>.
+              </p>
+              <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:24px;">
+                Thay thế các phòng lab robot đắt tiền ($100k+) bằng môi trường đám mây tốc độ cao, hỗ trợ chuẩn <strong>Hugging Face LeRobot</strong> và <strong>Google DeepMind RLDS</strong>.
+              </p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <span class="badge-pill">⚡ 60 FPS WebGL</span>
+                <span class="badge-pill">🦾 Multi-Robot Embodiment</span>
+                <span class="badge-pill">☁️ Colab T4 GPU Engine</span>
+                <span class="badge-pill">🤗 1-Click HuggingFace Hub</span>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <div class="metric-box"><div class="metric-val">0đ</div><div class="metric-lbl">Hardware CAPEX</div></div>
+              <div class="metric-box"><div class="metric-val">60+</div><div class="metric-lbl">FPS WebGL 3D</div></div>
+              <div class="metric-box"><div class="metric-val">35+</div><div class="metric-lbl">Procedural Assets</div></div>
+              <div class="metric-box"><div class="metric-val">100%</div><div class="metric-lbl">Data Persistence</div></div>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 02 // VẤN ĐỀ CỦA THỊ TRƯỜNG",
+        title: "Nút Thắt Dữ Liệu & Phần Cứng Trong Physical AI",
+        content: `
+          <div class="grid-3col">
+            <div class="feature-card" style="border-color:rgba(239,68,68,0.3);">
+              <div class="card-icon">💸</div>
+              <div class="card-title" style="color:#ef4444;">Phần Cứng Quá Đắt & Dễ Hỏng</div>
+              <div class="card-desc">Một cánh tay robot nghiên cứu (Franka/UR5e) tốn <strong>$25,000 – $60,000 USD</strong>. Va chạm khi thử nghiệm gây gãy vỡ, bảo trì hàng ngàn USD.</div>
+            </div>
+            <div class="feature-card" style="border-color:rgba(245,158,11,0.3);">
+              <div class="card-icon">⏳</div>
+              <div class="card-title" style="color:#f59e0b;">Thu Thập Teleoperation Thủ Công</div>
+              <div class="card-desc">Cần 6–12 tháng và đội ngũ kỹ sư túc trực liên tục để thu thập 10,000 trajectories điều khiển thực tế. Rất chậm và không thể scale.</div>
+            </div>
+            <div class="feature-card" style="border-color:rgba(127,0,255,0.3);">
+              <div class="card-icon">🧩</div>
+              <div class="card-title" style="color:#a78bfa;">Khoảng Cách Sim-to-Real & Setup</div>
+              <div class="card-desc">Môi trường giả lập hiện nay (Isaac Sim) quá nặng, đòi hỏi máy trạm card đồ họa RTX 4090 ($3,000+) và cài đặt Linux phức tạp.</div>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 03 // GIẢI PHÁP PHYSISIM AI",
+        title: "Nền Tảng Giả Lập Đa Vật Lý Đám Mây 1-Click",
+        content: `
+          <div class="grid-3col">
+            <div class="feature-card" style="border-color:rgba(0,242,254,0.3);">
+              <div class="card-icon">🌐</div>
+              <div class="card-title" style="color:var(--primary-cyan);">Zero-CAPEX Browser Access</div>
+              <div class="card-desc">Chạy 100% trên trình duyệt Web, backend GPU đám mây miễn phí (Google Colab T4), không cần máy tính cấu hình khủng.</div>
+            </div>
+            <div class="feature-card" style="border-color:rgba(16,185,129,0.3);">
+              <div class="card-icon">🏗️</div>
+              <div class="card-title" style="color:var(--accent-neon);">Procedural 3D Scene Builder</div>
+              <div class="card-desc">Dựng môi trường bệnh viện, nhà máy, phòng lab trong vài phút với kho 35+ asset 3D kèm Deep Inspector vật liệu & ma sát.</div>
+            </div>
+            <div class="feature-card" style="border-color:rgba(127,0,255,0.3);">
+              <div class="card-icon">🤗</div>
+              <div class="card-title" style="color:#a78bfa;">Native Hugging Face Pipeline</div>
+              <div class="card-desc">Tự động sinh dataset chuẩn LeRobot HDF5 / RLDS, đồng bộ trực tiếp lên Hugging Face Hub và train Behavioral Cloning ngay trên cloud.</div>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 04 // DEMO SẢN PHẨM THỰC TẾ",
+        title: "Sản Phẩm Đã Hoàn Thiện & Sẵn Sàng Vận Hành",
+        content: `
+          <div class="grid-2col">
+            <div>
+              <div style="margin-bottom:16px;">
+                <h4 style="color:var(--text-bright); margin-bottom:4px;">🎮 Simulation Studio</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Điều khiển 6DoF End-Effector, theo dõi lực Tactile Force thời gian thực và stream ảnh Wrist Cam RGB-D $280\times140$.</p>
+              </div>
+              <div style="margin-bottom:16px;">
+                <h4 style="color:var(--text-bright); margin-bottom:4px;">🏗️ Dedicated Scene Studio</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Kho 35+ vật thể (School, Hospital, Factory, Lab, Archi, Shapes) với Deep Inspector chỉnh màu, ma sát, độ đàn hồi và xuất XML MuJoCo.</p>
+              </div>
+              <div>
+                <h4 style="color:var(--text-bright); margin-bottom:4px;">🧠 Policy Rollout & Timeline Ghosting</h4>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Mô hình AI tự hành thực hiện Pick & Place với Domain Randomization, hiển thị đường quỹ đạo 3D phát sáng.</p>
+              </div>
+            </div>
+            <div style="background:rgba(0,0,0,0.5); border:1px solid var(--border-subtle); border-radius:16px; padding:20px; text-align:center;">
+              <div style="font-size:40px; margin-bottom:8px;">🦾 ⚛ 📊</div>
+              <div style="font-family:var(--font-heading); font-size:1.1rem; font-weight:700; color:var(--primary-cyan); margin-bottom:6px;">All-in-One Robotics AI Workbench</div>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:16px;">Three.js WebGL (Frontend) ⟷ FastAPI + MuJoCo (GPU Cloud)</div>
+              <a href="../frontend/index.html" target="_blank" class="btn-action-primary" style="justify-content:center; width:100%;">Trải Nghiệm Live Demo</a>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 05 // DUNG LƯỢNG THỊ TRƯỜNG",
+        title: "Cơ Hội Thị Trường Bùng Nổ Của Physical AI",
+        content: `
+          <div class="grid-3col">
+            <div class="metric-box">
+              <div class="metric-val">$28.5B</div>
+              <div class="metric-lbl">TAM (Total Addressable Market)</div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">Toàn bộ thị trường Robotics Simulation, Synthetic Data & Physical AI Tooling vào năm 2030.</p>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val">$4.8B</div>
+              <div class="metric-lbl">SAM (Serviceable Addressable)</div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">Thị trường dữ liệu huấn luyện AI cho Robot Manipulation và AI Agents công nghiệp/y tế.</p>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val">$180M</div>
+              <div class="metric-lbl">SOM (Serviceable Obtainable)</div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">50,000+ nhà nghiên cứu robotics, AI labs trường đại học và startup AI trong 3 năm đầu.</p>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 06 // MÔ HÌNH KINH DOANH (BUSINESS MODEL)",
+        title: "Product-Led Growth & Mô Hình Doanh Thu Đa Tầng",
+        content: `
+          <div class="grid-3col">
+            <div class="feature-card">
+              <div class="slide-tag" style="color:var(--text-muted);">TIER 1</div>
+              <div class="card-title">Freemium Tier ($0)</div>
+              <div class="card-desc" style="margin-bottom:12px;">Truy cập Web Studio miễn phí, chạy backend Colab GPU T4, lưu trữ Google Drive, xuất LeRobot dataset.</div>
+              <strong style="color:var(--primary-cyan); font-size:0.8rem;">Mục tiêu: Đạt 50,000+ Developers</strong>
+            </div>
+            <div class="feature-card" style="border-color:rgba(0,242,254,0.4); background:rgba(0,242,254,0.04);">
+              <div class="slide-tag" style="color:var(--primary-cyan);">TIER 2 (POPULAR)</div>
+              <div class="card-title">Pro Cloud ($49 / tháng)</div>
+              <div class="card-desc" style="margin-bottom:12px;">Cụm GPU Cloud chuyên dụng không bị timeout, sinh dữ liệu tốc độ cao 10,000+ FPS, private HuggingFace sync.</div>
+              <strong style="color:var(--accent-neon); font-size:0.8rem;">Dành cho: Researchers & AI Engineers</strong>
+            </div>
+            <div class="feature-card">
+              <div class="slide-tag" style="color:var(--primary-purple);">TIER 3</div>
+              <div class="card-title">Enterprise ($1,500 - $10,000/th)</div>
+              <div class="card-desc" style="margin-bottom:12px;">Custom CAD/URDF ingestion, bộ dữ liệu tổng hợp chuyên ngành công nghiệp, on-premise deployment.</div>
+              <strong style="color:#a78bfa; font-size:0.8rem;">Dành cho: Robotics Startups & Nhà Máy</strong>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 07 // SỰ KHÁC BIỆT & LỢI THẾ CẠNH TRANH",
+        title: "Lợi Thế Cạnh Tranh Tuyệt Đối (Our Moats)",
+        content: `
+          <table class="doc-table">
+            <thead>
+              <tr><th>Tiêu Chí So Sánh</th><th>Nvidia Isaac Sim</th><th>Gazebo / Webots</th><th style="color:var(--primary-cyan);">PhysiSim AI (Ours)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Chi phí phần cứng</strong></td><td>Yêu cầu GPU RTX 4090 ($3k+)</td><td>Cài đặt local nặng nề</td><td style="color:var(--accent-neon); font-weight:bold;">0 VNĐ (Chạy Web)</td></tr>
+              <tr><td><strong>Thời gian cài đặt</strong></td><td>2–4 giờ cài Omniverse</td><td>1–2 giờ build Linux/ROS</td><td style="color:var(--accent-neon); font-weight:bold;">10 giây (Mở URL là chạy)</td></tr>
+              <tr><td><strong>Chuẩn Physical AI</strong></td><td>USD / Custom Format</td><td>ROS C++</td><td style="color:var(--primary-cyan); font-weight:bold;">LeRobot HDF5 + RLDS</td></tr>
+              <tr><td><strong>Đồng bộ Hugging Face</strong></td><td>Không có sẵn</td><td>Không có</td><td style="color:var(--primary-cyan); font-weight:bold;">1-Click Auto Upload</td></tr>
+              <tr><td><strong>Dựng cảnh Procedural</strong></td><td>Thủ công bằng USD Composer</td><td>Viết file XML tay</td><td style="color:var(--primary-cyan); font-weight:bold;">Kho 35+ Vật Thể Trực Quan</td></tr>
+            </tbody>
+          </table>
+        `
+      },
+      {
+        tag: "SLIDE 08 // TIẾN ĐỘ & KẾT QUẢ ĐẠT ĐƯỢC",
+        title: "Traction & Kết Quả Đã Hoàn Thành",
+        content: `
+          <div class="grid-2col">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+              <div class="metric-box"><div class="metric-val">24/24</div><div class="metric-lbl">Unit Tests Passed (100%)</div></div>
+              <div class="metric-box"><div class="metric-val">60 FPS</div><div class="metric-lbl">Three.js WebGL Engine</div></div>
+              <div class="metric-box"><div class="metric-val">100%</div><div class="metric-lbl">Colab + Drive Persistence</div></div>
+              <div class="metric-box"><div class="metric-val">0$</div><div class="metric-lbl">Cloud Operating Cost</div></div>
+            </div>
+            <div>
+              <ul style="list-style:none; display:flex; flex-direction:column; gap:12px; font-size:0.9rem;">
+                <li style="display:flex; align-items:center; gap:8px;">✅ <strong>Full Platform Architecture:</strong> Hoàn thành toàn bộ Frontend SPA và FastAPI Backend.</li>
+                <li style="display:flex; align-items:center; gap:8px;">✅ <strong>MuJoCo Solver & Offscreen Render:</strong> Tích hợp tính toán động lực học và camera cổ tay.</li>
+                <li style="display:flex; align-items:center; gap:8px;">✅ <strong>Hugging Face & Drive Sync:</strong> Loại bỏ hoàn toàn nỗi lo mất dữ liệu khi Colab restart.</li>
+                <li style="display:flex; align-items:center; gap:8px;">✅ <strong>Production Deployment:</strong> Đã có sẵn Vercel static config và Docker CUDA GPU container.</li>
+              </ul>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 09 // KIẾN TRÚC CÔNG NGHỆ",
+        title: "Kiến Trúc Cloud-Native, Decoupled & Siêu Nhẹ",
+        content: `
+          <div class="grid-3col">
+            <div class="feature-card">
+              <div class="card-icon">🎨</div>
+              <div class="card-title">Frontend Layer</div>
+              <div class="card-desc">Three.js r128 WebGL rendering 60 FPS, Chart.js telemetry, Vanilla CSS Dark Theme, Scene Studio 35+ Assets.</div>
+            </div>
+            <div class="feature-card">
+              <div class="card-icon">⚙️</div>
+              <div class="card-title">Backend Layer</div>
+              <div class="card-desc">FastAPI microservice, DH Forward Kinematics, MuJoCo CUDA Physics Solver, Offscreen RGB-D JPEG stream.</div>
+            </div>
+            <div class="feature-card">
+              <div class="card-icon">☁️</div>
+              <div class="card-title">Storage & AI Hub</div>
+              <div class="card-desc">Google Drive Persistent Mount (.h5 dataset), Hugging Face Hub (Datasets & Policy Checkpoints).</div>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 10 // CHIẾN LƯỢC TĂNG TRƯỞNG (GTM PLAN)",
+        title: "Chiến Lược Go-To-Market Từ Cộng Đồng Đến Doanh Nghiệp",
+        content: `
+          <div class="grid-3col">
+            <div class="feature-card">
+              <div class="slide-tag">GIAI ĐOẠN 1 (THÁNG 1-6)</div>
+              <div class="card-title">Open Community Growth</div>
+              <div class="card-desc">Phát hành playground cho cộng đồng Hugging Face LeRobot, Discord Robotics, ROS và 10+ phòng lab đại học hàng đầu.</div>
+            </div>
+            <div class="feature-card">
+              <div class="slide-tag" style="color:var(--accent-neon);">GIAI ĐOẠN 2 (THÁNG 6-12)</div>
+              <div class="card-title">Self-Serve Pro Cloud</div>
+              <div class="card-desc">Ra mắt gói Pro Cloud GPU 1-click không giới hạn thời gian cho các startup và kỹ sư AI độc lập.</div>
+            </div>
+            <div class="feature-card">
+              <div class="slide-tag" style="color:var(--primary-purple);">GIAI ĐOẠN 3 (NĂM 2)</div>
+              <div class="card-title">B2B Enterprise Sales</div>
+              <div class="card-desc">Cung cấp giải pháp synthetic data cho các hãng sản xuất robot công nghiệp, kho vận logistics và y tế.</div>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 11 // ĐỘI NGŨ PHÁT TRIỂN (TEAM)",
+        title: "Đội Ngũ Kỹ Thuật Robotics & AI Chuyên Sâu",
+        content: `
+          <div class="grid-2col">
+            <div class="feature-card">
+              <div class="card-icon">👨‍💻</div>
+              <div class="card-title">Core Engineering & AI Robotics</div>
+              <div class="card-desc">Chuyên gia thiết kế hệ thống, am hiểu sâu sắc về Robot Kinematics, MuJoCo Physics, Three.js WebGL, Imitation Learning và Diffusion Policy.</div>
+            </div>
+            <div class="feature-card">
+              <div class="card-icon">🤝</div>
+              <div class="card-title">Advisors & Industry Partners</div>
+              <div class="card-desc">Các cố vấn trong lĩnh vực Computer Vision, Autonomous Manipulation, Cloud Infrastructure và đầu tư mạo hiểm AI/Robotics.</div>
+            </div>
+          </div>
+        `
+      },
+      {
+        tag: "SLIDE 12 // VÒNG GỌI VỐN PRE-SEED (THE ASK)",
+        title: "Gọi Vốn $350,000 – $500,000 USD (Pre-Seed Round)",
+        content: `
+          <div class="grid-2col">
+            <div>
+              <p style="font-size:1.1rem; color:var(--text-bright); margin-bottom:16px;">
+                Mục tiêu đạt được trong <strong style="color:var(--primary-cyan);">18 tháng</strong>:
+              </p>
+              <ul style="list-style:none; display:flex; flex-direction:column; gap:10px; font-size:0.9rem; margin-bottom:20px;">
+                <li>🚀 <strong>25,000 Active Developers</strong> & 500+ Paying Pro Users.</li>
+                <li>📦 <strong>1,000+ Procedural 3D Assets</strong> & 50+ Robot Embodiments.</li>
+                <li>💵 Đạt <strong>$30,000 MRR</strong> (Monthly Recurring Revenue).</li>
+              </ul>
+              <div style="font-family:var(--font-mono); font-size:0.85rem; color:var(--accent-neon);">
+                Structure: SAFE Note / Convertible Note (Capped Valuation)
+              </div>
+            </div>
+            <div class="feature-card" style="border-color:var(--border-glow);">
+              <div class="card-title" style="color:var(--primary-cyan); margin-bottom:12px;">Phân Bổ Nguồn Vốn (Use of Funds)</div>
+              <div style="font-size:0.85rem; display:flex; flex-direction:column; gap:8px;">
+                <div>■ <strong>50% R&D & Core Physics:</strong> Diffusion Sim-to-Real pipeline.</div>
+                <div>■ <strong>25% Cloud GPU Infrastructure:</strong> Server clusters & bandwidth.</div>
+                <div>■ <strong>15% Developer Community & GTM:</strong> AI Hackathons & DevRel.</div>
+                <div>■ <strong>10% Legal, Ops & Contingency:</strong> Vận hành và pháp lý.</div>
+              </div>
+            </div>
+          </div>
+        `
+      }
+    ];
+
+    let currentSlide = 0;
+
+    function renderSlide(index) {
+      currentSlide = index;
+      const s = SLIDES_DATA[index];
+      const card = document.getElementById('slideCard');
+      card.innerHTML = `
+        <div class="slide-header">
+          <div>
+            <div class="slide-tag">${s.tag}</div>
+            <h2 class="slide-title">${s.title}</h2>
+          </div>
+          <div class="slide-counter-badge">${index + 1} / ${SLIDES_DATA.length}</div>
+        </div>
+        <div class="slide-body">
+          ${s.content}
+        </div>
+      `;
+
+      // Update dots
+      const dots = document.querySelectorAll('.slide-dot');
+      dots.forEach((d, i) => {
+        d.className = i === index ? 'slide-dot active' : 'slide-dot';
+      });
+    }
+
+    function initDots() {
+      const container = document.getElementById('slideDotsContainer');
+      container.innerHTML = '';
+      SLIDES_DATA.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = i === 0 ? 'slide-dot active' : 'slide-dot';
+        dot.onclick = () => renderSlide(i);
+        container.appendChild(dot);
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < SLIDES_DATA.length - 1) {
+        renderSlide(currentSlide + 1);
+      } else {
+        renderSlide(0);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        renderSlide(currentSlide - 1);
+      } else {
+        renderSlide(SLIDES_DATA.length - 1);
+      }
+    }
+
+    // Keyboard Arrow navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    function switchView(viewName) {
+      document.getElementById('view-pitch').style.display = viewName === 'pitch' ? 'block' : 'none';
+      document.getElementById('view-flow').style.display = viewName === 'flow' ? 'block' : 'none';
+      document.getElementById('view-doc').style.display = viewName === 'doc' ? 'block' : 'none';
+
+      document.getElementById('tabBtn-pitch').className = viewName === 'pitch' ? 'nav-tab-btn active' : 'nav-tab-btn';
+      document.getElementById('tabBtn-flow').className = viewName === 'flow' ? 'nav-tab-btn active' : 'nav-tab-btn';
+      document.getElementById('tabBtn-doc').className = viewName === 'doc' ? 'nav-tab-btn active' : 'nav-tab-btn';
+    }
+
+    // Initialize
+    initDots();
+    renderSlide(0);
+  </script>
+</body>
+</html>
