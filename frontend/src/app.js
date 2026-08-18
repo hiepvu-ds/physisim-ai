@@ -4,12 +4,18 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Load saved API URL if any
-  const savedUrl = localStorage.getItem('physisim_api_url');
+  // 1. Load saved API URL if any & Auto-Connect
+  const savedUrl = localStorage.getItem('physisim_api_url') || (typeof CONFIG !== 'undefined' ? CONFIG.COLAB_API_URL : '');
   if (savedUrl) {
-    document.getElementById('apiUrlInput').value = savedUrl;
+    const input = document.getElementById('apiUrlInput');
+    if (input) input.value = savedUrl;
     apiBaseUrl = savedUrl;
+    // Tự động kết nối ngay lập tức
+    setTimeout(() => {
+      if (typeof connectAPI === 'function') connectAPI();
+    }, 400);
   }
+
 
   // 2. Init Three.js viewport
   initViewport();
