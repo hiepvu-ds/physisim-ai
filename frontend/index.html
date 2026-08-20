@@ -417,16 +417,31 @@
     <!-- ── CENTER 3D WORKSPACE (STUDIO VIEWPORT) ── -->
     <main id="viewport-container-studio" style="position:relative;background:#020408;">
       <!-- Top floating tools -->
-      <div class="studio-viewport-topbar">
-        <button class="studio-tool-btn" onclick="if(selectedObjectId) focusOnStudioObject(selectedObjectId)">🎯 Focus</button>
-        <button class="studio-tool-btn" onclick="camera.position.set(3,2.5,4);camera.lookAt(0,0.8,0);">🔄 Reset View</button>
-        <button class="studio-tool-btn" onclick="if(selectedObjectId) duplicateStudioObject(selectedObjectId)">⧉ Duplicate</button>
-        <button class="studio-tool-btn" onclick="if(selectedObjectId) removeStudioObject(selectedObjectId)" style="color:#ef4444;">🗑️ Delete</button>
+      <!-- Top floating spatial architecture & tool bar -->
+      <div class="studio-viewport-topbar" style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(12,20,38,0.9);padding:6px 14px;border-radius:12px;border:1px solid rgba(0,242,254,0.25);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:0.75rem;font-weight:800;color:#00f2fe;display:flex;align-items:center;gap:4px;">
+            📐 <span id="roomDimensionsDisplay">6.0m × 5.0m · Trần: 3.2m</span>
+          </span>
+          <div style="display:flex;gap:4px;">
+            <button class="studio-tool-btn" onclick="window.SceneStudioView.configureRoomArchitecture({width:6,length:5,height:3.2,theme:'hospital'})">🏥 ICU</button>
+            <button class="studio-tool-btn" onclick="window.SceneStudioView.configureRoomArchitecture({width:8,length:6,height:3.8,theme:'factory'})">🏭 Factory</button>
+            <button class="studio-tool-btn" onclick="window.SceneStudioView.configureRoomArchitecture({width:5,length:4,height:3.0,theme:'lab'})">🧪 Lab</button>
+            <button class="studio-tool-btn" onclick="window.SceneStudioView.configureRoomArchitecture({width:7,length:6,height:3.2,theme:'classroom'})">🏫 Class</button>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button class="studio-tool-btn" onclick="if(selectedObjectId) focusOnStudioObject(selectedObjectId)">🎯 Focus</button>
+          <button class="studio-tool-btn" onclick="camera.position.set(4,3.2,5);camera.lookAt(0,0.8,0);">🔄 Reset Cam</button>
+          <button class="studio-tool-btn" onclick="if(selectedObjectId) duplicateStudioObject(selectedObjectId)">⧉ Duplicate</button>
+          <button class="studio-tool-btn" onclick="if(selectedObjectId) removeStudioObject(selectedObjectId)" style="color:#ef4444;">🗑️ Delete</button>
+        </div>
       </div>
 
       <!-- Bottom floating action bar -->
       <div class="studio-bottom-actionbar">
-        <button class="btn-studio-launch" onclick="launchSimulationWithCurrentScene()">🚀 Chạy Mô Phỏng Với Cảnh Này</button>
+        <button class="btn-studio-launch" onclick="window.SceneStudioView.transferSceneToSimulation()">🚀 Nạp Cảnh Sang Simulation Studio</button>
         <button class="studio-tool-btn" onclick="saveCurrentStudioScene()">💾 Lưu Cảnh</button>
         <button class="studio-tool-btn" onclick="exportFullSceneMJCF()">📄 Xuất MuJoCo XML</button>
         <button class="studio-tool-btn" onclick="exportFullSceneJSON()">📥 Xuất JSON</button>
@@ -434,37 +449,68 @@
       </div>
     </main>
 
-    <!-- ── RIGHT SIDEBAR: DEEP INSPECTOR & SCENE MANAGER ── -->
-    <aside class="studio-sidebar studio-sidebar-right">
+    <!-- ── RIGHT SIDEBAR: AI SCENE AGENT & DEEP INSPECTOR ── -->
+    <aside class="studio-sidebar studio-sidebar-right" style="width:340px;">
       <!-- Right Tabs -->
       <div class="panel-tabs" style="margin-bottom:8px;">
-        <button class="panel-tab active" id="studioRightTabBtn-detail" onclick="switchStudioRightTab('detail')">✏️ Chi Tiết</button>
+        <button class="panel-tab active" id="studioRightTabBtn-ai" onclick="switchStudioRightTab('ai')">🤖 AI Agent</button>
+        <button class="panel-tab" id="studioRightTabBtn-detail" onclick="switchStudioRightTab('detail')">✏️ Chi Tiết</button>
         <button class="panel-tab" id="studioRightTabBtn-hierarchy" onclick="switchStudioRightTab('hierarchy')">🌳 Cây Cảnh</button>
         <button class="panel-tab" id="studioRightTabBtn-saved" onclick="switchStudioRightTab('saved')">💾 Đã Lưu</button>
-        <button class="panel-tab" id="studioRightTabBtn-env" onclick="switchStudioRightTab('env')">🌍 Môi Trường</button>
+      </div>
+
+      <!-- Content 0: AI Scene Agent Chat Tab -->
+      <div id="studioRightTabContent-ai" style="display:block;height:calc(100% - 44px);display:flex;flex-direction:column;">
+        <div style="background:rgba(127,0,255,0.08);border:1px solid rgba(127,0,255,0.25);border-radius:10px;padding:10px;margin-bottom:10px;">
+          <div style="font-size:0.8rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:6px;">
+            <span>🤖 AI Scene Architect</span>
+            <span class="badge-pill" style="font-size:0.6rem;background:rgba(16,185,129,0.2);color:#10b981;border-color:#10b981;">Online</span>
+          </div>
+          <div style="font-size:0.68rem;color:#94a3b8;margin-top:2px;">
+            Nhập mô tả bằng ngôn ngữ tự nhiên để AI tự động sinh, xếp đặt và chỉnh sửa không gian 3D.
+          </div>
+        </div>
+
+        <!-- Prompt suggestions chips -->
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;">
+          <button onclick="document.getElementById('agentPromptInput').value=this.textContent;window.aiSceneAgent.processPrompt(this.textContent);" style="padding:3px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#94a3b8;font-size:0.63rem;cursor:pointer;">🏥 Phòng Mổ ICU 6x5m</button>
+          <button onclick="document.getElementById('agentPromptInput').value=this.textContent;window.aiSceneAgent.processPrompt(this.textContent);" style="padding:3px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#94a3b8;font-size:0.63rem;cursor:pointer;">🏭 Xưởng Băng Chuyền 8x6m</button>
+          <button onclick="document.getElementById('agentPromptInput').value=this.textContent;window.aiSceneAgent.processPrompt(this.textContent);" style="padding:3px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#94a3b8;font-size:0.63rem;cursor:pointer;">🧪 Lab Sinh Hóa 5x4m</button>
+          <button onclick="document.getElementById('agentPromptInput').value=this.textContent;window.aiSceneAgent.processPrompt(this.textContent);" style="padding:3px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#94a3b8;font-size:0.63rem;cursor:pointer;">🏫 Lớp Học 7x6m</button>
+        </div>
+
+        <!-- Chat messages stream -->
+        <div id="agentChatMessages" style="flex:1;overflow-y:auto;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px;display:flex;flex-direction:column;min-height:220px;max-height:340px;margin-bottom:10px;">
+          <div class="agent-msg agent-msg-agent" style="background:rgba(127,0,255,0.12);border:1px solid rgba(127,0,255,0.3);border-radius:12px 12px 12px 2px;padding:10px 14px;margin-bottom:10px;align-self:flex-start;max-width:92%;color:#e2e8f0;font-size:0.75rem;line-height:1.4;">
+            <div style="font-size:0.62rem;color:#a855f7;font-weight:700;margin-bottom:3px;">🤖 AI SCENE AGENT</div>
+            Xin chào! Tôi là Trợ lý Dựng Cảnh AI. Bạn muốn thiết kế không gian 3D nào hôm nay? Hãy thử gõ: <em>"Tạo phòng hồi sức cấp cứu có giường, máy monitor và trụ truyền dịch"</em>.
+          </div>
+        </div>
+
+        <!-- Chat input bar -->
+        <div style="display:flex;gap:6px;">
+          <input id="agentPromptInput" type="text" placeholder="Nhập yêu cầu dựng cảnh..." style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(0,242,254,0.3);border-radius:8px;padding:8px 10px;color:#fff;font-size:0.75rem;" onkeydown="if(event.key==='Enter'){window.aiSceneAgent.processPrompt(this.value);this.value='';}">
+          <button onclick="const inp=document.getElementById('agentPromptInput');if(inp.value){window.aiSceneAgent.processPrompt(inp.value);inp.value='';}" style="padding:8px 14px;border:none;border-radius:8px;background:linear-gradient(135deg,#00f2fe,#7f00ff);color:#020408;font-weight:800;cursor:pointer;font-size:0.75rem;">
+            Gửi ➔
+          </button>
+        </div>
       </div>
 
       <!-- Content 1: Detail Inspector -->
-      <div id="studioRightTabContent-detail" style="display:block;">
+      <div id="studioRightTabContent-detail" style="display:none;">
         <div id="studioInspectorPanel"></div>
       </div>
 
       <!-- Content 2: Scene Hierarchy -->
       <div id="studioRightTabContent-hierarchy" style="display:none;">
         <div class="section-title">🌳 Danh Sách Đối Tượng Trong Cảnh</div>
-        <div id="studioHierarchyList" style="max-height:500px;overflow-y:auto;"></div>
+        <div id="sceneHierarchyList" style="max-height:500px;overflow-y:auto;"></div>
       </div>
 
       <!-- Content 3: Saved Scenes Manager -->
       <div id="studioRightTabContent-saved" style="display:none;">
         <div class="section-title">💾 Quản Lý Cảnh (Scene Manager)</div>
         <div id="studioSavedScenesList" style="max-height:480px;overflow-y:auto;"></div>
-      </div>
-
-      <!-- Content 4: Global Environment & Physics Modulation -->
-      <div id="studioRightTabContent-env" style="display:none;">
-        <div class="section-title">🌍 Biến Đổi Môi Trường & Vật Lý</div>
-        <div id="studioEnvModulationPanel"></div>
       </div>
     </aside>
   </div>
@@ -809,6 +855,8 @@
   <script src="src/controls.js"></script>
   <script src="src/drawer.js"></script>
   <script src="src/policy_runner.js"></script>
+  <script src="src/scene_studio_view.js"></script>
+  <script src="src/ai_scene_agent.js"></script>
   <script src="src/trajectory_inspector.js"></script>
   <script src="src/app.js"></script>
 

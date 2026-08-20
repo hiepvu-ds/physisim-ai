@@ -1302,17 +1302,24 @@ function exportFullSceneJSON() {
    RIGHT SIDEBAR TAB SWITCHER IN SCENE STUDIO
    ════════════════════════════════════════════════ */
 function switchStudioRightTab(tabKey) {
-  ['detail', 'hierarchy', 'saved', 'env'].forEach(t => {
+  ['ai', 'detail', 'hierarchy', 'saved', 'env'].forEach(t => {
     const btn = document.getElementById(`studioRightTabBtn-${t}`);
     const content = document.getElementById(`studioRightTabContent-${t}`);
     if (btn) btn.classList.toggle('active', t === tabKey);
-    if (content) content.style.display = (t === tabKey) ? 'block' : 'none';
+    if (content) content.style.display = (t === tabKey) ? (t === 'ai' ? 'flex' : 'block') : 'none';
   });
-  if (tabKey === 'hierarchy') renderStudioSceneHierarchy();
+  if (tabKey === 'hierarchy') {
+    if (window.SceneStudioView && typeof window.SceneStudioView.refreshHierarchy === 'function') {
+      window.SceneStudioView.refreshHierarchy();
+    } else {
+      renderStudioSceneHierarchy();
+    }
+  }
   else if (tabKey === 'saved') renderStudioSavedScenes();
   else if (tabKey === 'env') renderStudioEnvModulation();
   else if (tabKey === 'detail') renderStudioPropertiesPanel();
 }
+
 
 window.switchStudioRightTab = switchStudioRightTab;
 window.switchAppMode = switchAppMode;
@@ -1335,8 +1342,15 @@ window.setStudioLighting = setStudioLighting;
 window.setStudioFloorPreset = setStudioFloorPreset;
 window.toggleStudioDomainRand = toggleStudioDomainRand;
 window.launchSimulationWithCurrentScene = launchSimulationWithCurrentScene;
-window.exportFullSceneMJCF = exportFullSceneMJCF;
-window.exportFullSceneJSON = exportFullSceneJSON;
-window.SCENE_REGISTRY = SCENE_REGISTRY;
-window.ENV_STATE = ENV_STATE;
+window.createProceduralMesh = function(itemId) {
+  for (const cat of Object.values(OBJECT_LIBRARY)) {
+    const it = cat.items.find(i => i.id === itemId);
+    if (it && typeof it.builder === 'function') {
+      return it.builder();
+    }
+  }
+  return null;
+};
+window.OBJECT_LIBRARY = OBJECT_LIBRARY;
+
 

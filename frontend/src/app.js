@@ -17,8 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // 2. Init Three.js viewport
+  // 2. Init Three.js viewport & Room Architecture
   initViewport();
+  if (window.SceneStudioView && typeof window.SceneStudioView.initRoomArchitecture === 'function') {
+    window.SceneStudioView.initRoomArchitecture();
+  }
 
   // 3. Init Charts + Wrist Cam
   initForceChart();
