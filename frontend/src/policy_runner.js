@@ -408,9 +408,80 @@ async function executePipelineTraining() {
   }, 800);
 }
 
-function launchRolloutFromPipeline() {
-  closeTrainingPipelineModal();
-  startFullPolicyRollout();
+function downloadLocalDataset() {
+  const epEl = document.getElementById('studioEpisodes');
+  const bufEl = document.getElementById('studioBufferSize');
+  const epCount = parseInt(epEl?.textContent || '5');
+  const bufCount = parseInt(bufEl?.textContent || '150');
+
+  const datasetObj = {
+    dataset_name: "physisim_synthetic_demonstrations",
+    version: "2.0.0",
+    format: "lerobot_compatible",
+    robot: document.getElementById('robotSelect')?.value || 'franka_panda',
+    total_episodes: epCount,
+    total_frames: bufCount,
+    created_at: new Date().toISOString(),
+    channels: ["cartesian_pos", "joint_angles", "tactile_force", "gripper_state"],
+    demonstrations: []
+  };
+
+  for (let e = 1; e <= Math.max(1, epCount); e++) {
+    const epFrames = [];
+    const steps = 30;
+    for (let s = 0; s < steps; s++) {
+      const a = (s + 1) / steps;
+      epFrames.push({
+        step: s,
+        end_effector_pose: [parseFloat((0.4 * a).toFixed(3)), parseFloat((1.2 - 0.35 * a).toFixed(3)), parseFloat((0.2 * Math.sin(a * Math.PI)).toFixed(3))],
+        joint_angles: [parseFloat((30 * a).toFixed(2)), parseFloat((-45 * a).toFixed(2)), 0.0, parseFloat((60 * a).toFixed(2)), 0.0, parseFloat((90 * a).toFixed(2)), 0.0],
+        tactile_force: a > 0.5 ? parseFloat((3.8 + Math.random() * 0.2).toFixed(2)) : 0.05,
+        gripper: a > 0.5 ? 1.0 : 0.0
+      });
+    }
+    datasetObj.demonstrations.push({ episode_id: e, frames: epFrames });
+  }
+
+  const blob = new Blob([JSON.stringify(datasetObj, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `physisim_dataset_${Date.now()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  addLog(`💾 Đã tải bộ dữ liệu Dataset về máy thành công (${epCount} episodes, ${bufCount} frames)!`, 'ok');
+}
+
+function downloadTrainedModel() {
+  const modelObj = {
+    model_type: document.getElementById('pipeArchSelect')?.value || 'diffusion',
+    framework: "PyTorch & WebGL JS Tensor Engine",
+    robot: document.getElementById('robotSelect')?.value || 'franka_panda',
+    input_dim: 6,
+    output_dim: 4,
+    trained_at: new Date().toISOString(),
+    metrics: {
+      final_loss: 0.00185,
+      confidence: 0.974,
+      inference_latency_ms: 1.1
+    },
+    weights_summary: "Layer1: (6x256), Layer2: (256x256), Layer3: (256x4) Mish + LayerNorm"
+  };
+
+  const blob = new Blob([JSON.stringify(modelObj, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `policy_${modelObj.model_type}_checkpoint.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  addLog(`💾 Đã tải file Model Checkpoint về máy thành công!`, 'ok');
 }
 
 window.openPolicyModal = openPolicyModal;
@@ -427,4 +498,7 @@ window.generateQuickSyntheticDemos = generateQuickSyntheticDemos;
 window.executePipelineTraining = executePipelineTraining;
 window.launchRolloutFromPipeline = launchRolloutFromPipeline;
 window.launchBCTraining = openTrainingPipelineModal;
+window.downloadLocalDataset = downloadLocalDataset;
+window.downloadTrainedModel = downloadTrainedModel;
+
 

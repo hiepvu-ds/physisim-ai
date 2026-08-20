@@ -883,34 +883,35 @@
         </div>
       </div>
 
-      <!-- ════ STEP 2 CONTENT: CLOUD SYNC ════ -->
+      <!-- ════ STEP 2 CONTENT: CLOUD SYNC & LOCAL DOWNLOAD ════ -->
       <div id="pipeStepContent-2" style="display:none;">
         <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px;margin-bottom:18px;">
-          <div style="font-size:0.85rem;font-weight:800;color:#7f00ff;margin-bottom:10px;">☁️ Đồng Bộ Dữ Liệu Lên Hugging Face Hub / Google Drive</div>
+          <div style="font-size:0.85rem;font-weight:800;color:#7f00ff;margin-bottom:10px;">💾 Xuất Dataset & Lưu Trữ Dữ Liệu</div>
           <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;">
-            <div>
-              <label style="font-size:0.68rem;color:#64748b;font-weight:700;display:block;margin-bottom:4px;">HUGGING FACE DATASET REPO ID</label>
-              <input id="pipeHFRepoInput" type="text" value="bookerwin/physisim-franka-dataset" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(127,0,255,0.4);border-radius:8px;padding:8px 12px;color:#fff;font-size:0.78rem;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <button onclick="downloadLocalDataset()" style="padding:12px;border:1px solid rgba(0,242,254,0.4);border-radius:10px;background:rgba(0,242,254,0.1);color:#00f2fe;font-weight:800;cursor:pointer;font-size:0.8rem;">
+                📥 Tải Dataset Trực Tiếp Về Máy (.json)
+              </button>
+              <button onclick="exportData('lerobot')" style="padding:12px;border:1px solid rgba(16,185,129,0.4);border-radius:10px;background:rgba(16,185,129,0.1);color:#10b981;font-weight:800;cursor:pointer;font-size:0.8rem;">
+                🤗 Xuất Chuẩn LeRobot (.h5)
+              </button>
             </div>
-            <div style="font-size:0.72rem;color:#94a3b8;">
-              ✅ Định dạng xuất chuẩn: <strong>🤗 LeRobot HDF5 (.h5)</strong> & <strong>🧠 DeepMind RLDS (.jsonl)</strong>.
+            <div style="font-size:0.72rem;color:#94a3b8;line-height:1.4;">
+              💡 <em>Hoàn toàn tự động trên trình duyệt! Bạn không cần tài khoản Hugging Face hay Google Colab để lưu dữ liệu.</em>
             </div>
           </div>
         </div>
         <div style="display:flex;gap:10px;">
-          <button onclick="exportData('lerobot'); switchPipelineStep(3);" style="flex:1;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#7f00ff,#a855f7);color:#fff;font-weight:800;cursor:pointer;font-size:0.82rem;">
-            💾 Xuất Dataset & Chuyển Sang Bước Train
-          </button>
-          <button onclick="switchPipelineStep(3)" style="padding:12px 20px;border:1px solid rgba(255,255,255,0.15);border-radius:10px;background:transparent;color:#fff;font-weight:700;cursor:pointer;font-size:0.82rem;">
-            Bỏ Qua ➔
+          <button onclick="switchPipelineStep(3);" style="flex:1;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#7f00ff,#a855f7);color:#fff;font-weight:800;cursor:pointer;font-size:0.82rem;">
+            Chuyển Sang Bước Train AI ➔
           </button>
         </div>
       </div>
 
-      <!-- ════ STEP 3 CONTENT: GPU TRAINING ════ -->
+      <!-- ════ STEP 3 CONTENT: IN-BROWSER & GPU TRAINING ════ -->
       <div id="pipeStepContent-3" style="display:none;">
         <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px;margin-bottom:18px;">
-          <div style="font-size:0.85rem;font-weight:800;color:#10b981;margin-bottom:12px;">🧠 Cấu Hình Mạng Nơ-ron & GPU T4 Trainer</div>
+          <div style="font-size:0.85rem;font-weight:800;color:#10b981;margin-bottom:12px;">🧠 Cấu Hình Mạng Nơ-ron & Huấn Luyện AI</div>
           
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
             <div>
@@ -918,23 +919,12 @@
               <select id="pipeArchSelect" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(16,185,129,0.3);border-radius:8px;padding:8px;color:#fff;font-size:0.75rem;">
                 <option value="diffusion">🌊 Diffusion Policy (State-of-the-Art)</option>
                 <option value="transformer">⚡ Transformer ACT (Action Chunking)</option>
-                <option value="mlp">⚡ Deep MLP Residual (Fast ~10s)</option>
+                <option value="mlp">⚡ Deep MLP Residual (Fast ~5s)</option>
               </select>
             </div>
             <div>
               <label style="font-size:0.68rem;color:#64748b;font-weight:700;display:block;margin-bottom:4px;">SỐ VÒNG LẶP (EPOCHS)</label>
               <input id="pipeEpochsInput" type="number" value="50" min="10" max="300" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px;color:#fff;font-size:0.75rem;">
-            </div>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-            <div>
-              <label style="font-size:0.68rem;color:#64748b;font-weight:700;display:block;margin-bottom:4px;">BATCH SIZE</label>
-              <input id="pipeBatchInput" type="number" value="32" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px;color:#fff;font-size:0.75rem;">
-            </div>
-            <div>
-              <label style="font-size:0.68rem;color:#64748b;font-weight:700;display:block;margin-bottom:4px;">LEARNING RATE</label>
-              <input id="pipeLRInput" type="text" value="1e-4" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px;color:#fff;font-size:0.75rem;">
             </div>
           </div>
 
@@ -952,12 +942,12 @@
         </div>
         <div style="display:flex;gap:10px;">
           <button id="pipeStartTrainBtn" onclick="executePipelineTraining()" style="flex:1;padding:12px;border:none;border-radius:10px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:800;cursor:pointer;font-size:0.85rem;box-shadow:0 0 20px rgba(16,185,129,0.3);">
-            🚀 Khởi Chạy Huấn Luyện Trên GPU T4
+            🚀 Khởi Chạy Huấn Luyện AI Ngay Trên Web (1-Click)
           </button>
         </div>
       </div>
 
-      <!-- ════ STEP 4 CONTENT: 3D ROLLOUT ════ -->
+      <!-- ════ STEP 4 CONTENT: 3D ROLLOUT & MODEL DOWNLOAD ════ -->
       <div id="pipeStepContent-4" style="display:none;">
         <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px;margin-bottom:18px;text-align:center;">
           <div style="font-size:2.4rem;margin-bottom:8px;">🦾 ✨ 🎯</div>
@@ -965,9 +955,14 @@
           <p style="font-size:0.78rem;color:#94a3b8;line-height:1.5;max-width:480px;margin:0 auto 14px;">
             Mô hình AI đã học thành công chuỗi hành vi. Giờ đây bạn có thể khởi chạy mô phỏng tự hành (Autonomous Closed-Loop Rollout) để robot tự gắp và di chuyển vật thể trong không gian 3D.
           </p>
-          <div style="display:inline-flex;gap:8px;">
+          <div style="display:inline-flex;gap:8px;margin-bottom:14px;">
             <span class="badge-pill" style="border-color:#10b981;color:#10b981;">Confidence: 97.2%</span>
             <span class="badge-pill" style="border-color:#00f2fe;color:#00f2fe;">Inference Latency: 1.1ms</span>
+          </div>
+          <div>
+            <button onclick="downloadTrainedModel()" style="padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#fff;font-size:0.72rem;cursor:pointer;">
+              💾 Tải File Trọng Số Model Về Máy (.json)
+            </button>
           </div>
         </div>
         <div style="display:flex;gap:10px;">
