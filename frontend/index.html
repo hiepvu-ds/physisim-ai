@@ -142,7 +142,7 @@
     <!-- Mode Switcher Tabs -->
     <div class="mode-toggle-group">
       <button class="mode-toggle-btn active" id="modeBtnSim" onclick="switchAppMode('simulation')">🎮 Simulation Studio</button>
-      <button class="mode-toggle-btn" id="modeBtnStudio" onclick="switchAppMode('scene_studio')">🏗️ Scene Studio & Builder</button>
+      <button class="mode-toggle-btn" id="modeBtnStudio" onclick="switchAppMode('scene_studio')">✨ AI Scene Studio & Builder</button>
     </div>
 
     <div class="header-controls">
@@ -416,9 +416,17 @@
 
     <!-- ── CENTER 3D WORKSPACE (STUDIO VIEWPORT) ── -->
     <main id="viewport-container-studio" style="position:relative;background:#020408;">
-      <!-- Top floating tools -->
+      <!-- AI Command Bar (Prominent Prompt Input on 3D Canvas) -->
+      <div style="position:absolute;top:12px;left:16px;right:16px;z-index:20;display:flex;gap:8px;background:rgba(12,20,38,0.92);backdrop-filter:blur(16px);border:1.5px solid rgba(0,242,254,0.35);border-radius:14px;padding:8px 14px;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+        <span style="font-size:1.15rem;display:flex;align-items:center;">✨</span>
+        <input id="aiTopPromptInput" type="text" placeholder="Ra lệnh cho AI dựng không gian 3D (vd: 'Tạo phòng ICU bệnh viện 6x5m trần 3.2m có giường và máy monitor')..." style="flex:1;background:transparent;border:none;color:#fff;font-size:0.8rem;outline:none;" onkeydown="if(event.key==='Enter'){window.aiSceneAgent.processPrompt(this.value);this.value='';}">
+        <button onclick="const inp=document.getElementById('aiTopPromptInput');if(inp.value){window.aiSceneAgent.processPrompt(inp.value);inp.value='';}" style="padding:6px 14px;border:none;border-radius:8px;background:linear-gradient(135deg,#00f2fe,#7f00ff);color:#020408;font-weight:800;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;gap:4px;box-shadow:0 0 15px rgba(0,242,254,0.3);">
+          <span>⚡ Dựng Cảnh AI</span>
+        </button>
+      </div>
+
       <!-- Top floating spatial architecture & tool bar -->
-      <div class="studio-viewport-topbar" style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(12,20,38,0.9);padding:6px 14px;border-radius:12px;border:1px solid rgba(0,242,254,0.25);">
+      <div class="studio-viewport-topbar" style="top:62px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(12,20,38,0.85);padding:6px 14px;border-radius:12px;border:1px solid rgba(0,242,254,0.2);">
         <div style="display:flex;align-items:center;gap:10px;">
           <span style="font-size:0.75rem;font-weight:800;color:#00f2fe;display:flex;align-items:center;gap:4px;">
             📐 <span id="roomDimensionsDisplay">6.0m × 5.0m · Trần: 3.2m</span>
