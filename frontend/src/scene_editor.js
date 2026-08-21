@@ -333,119 +333,164 @@ function buildBookPile(w, h, d) {
 
 function buildHospitalBed(w, h, d) {
   const group = new THREE.Group();
-  const frameMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.8, roughness: 0.2 });
-  const matMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.6 });
+  const frameMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.85, roughness: 0.2 });
+  const chromeMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.95, roughness: 0.1 });
+  const matMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.5, metalness: 0.05 });
+  const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.9 });
 
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(w, 0.25, d), frameMat);
-  frame.position.y = 0.35;
-  const mattress = new THREE.Mesh(new THREE.BoxGeometry(w * 0.92, 0.18, d * 0.95), matMat);
-  mattress.position.y = 0.55;
-  const pillow = new THREE.Mesh(new THREE.BoxGeometry(w * 0.6, 0.1, 0.35), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9 }));
-  pillow.position.set(0, 0.68, -d / 2 + 0.3);
-  group.add(frame, mattress, pillow);
+  // Main chassis base with hydraulic columns
+  const chassis = new THREE.Mesh(new THREE.BoxGeometry(w * 0.85, 0.12, d * 0.85), frameMat);
+  chassis.position.y = 0.22;
+  chassis.castShadow = true;
+  group.add(chassis);
+
+  // 4 Swivel Caster Wheels with brakes
+  const wheelOffsets = [
+    [-w * 0.38, -d * 0.38], [w * 0.38, -d * 0.38],
+    [-w * 0.38,  d * 0.38], [w * 0.38,  d * 0.38]
+  ];
+  wheelOffsets.forEach(([wx, wz]) => {
+    const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.04, 16), wheelMat);
+    wheel.rotation.z = Math.PI / 2;
+    wheel.position.set(wx, 0.06, wz);
+    wheel.castShadow = true;
+    group.add(wheel);
+  });
+
+  // Bed Mattress (Ergonomic medical mattress)
+  const mattress = new THREE.Mesh(new THREE.BoxGeometry(w * 0.95, 0.16, d * 0.96), matMat);
+  mattress.position.y = 0.48;
+  mattress.castShadow = true;
+  group.add(mattress);
+
+  // Safety Side Rails (Foldable Stainless Guardrails)
+  [-w * 0.48, w * 0.48].forEach(rx => {
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.22, d * 0.6), chromeMat);
+    rail.position.set(rx, 0.62, 0);
+    rail.castShadow = true;
+    group.add(rail);
+  });
+
+  // Headboard and Footboard (Inox + ABS panels)
+  const headboard = new THREE.Mesh(new THREE.BoxGeometry(w * 0.98, 0.4, 0.04), frameMat);
+  headboard.position.set(0, 0.58, -d * 0.48);
+  const footboard = new THREE.Mesh(new THREE.BoxGeometry(w * 0.98, 0.3, 0.04), frameMat);
+  footboard.position.set(0, 0.52, d * 0.48);
+  group.add(headboard, footboard);
+
+  // Ergonomic Pillow
+  const pillow = new THREE.Mesh(new THREE.BoxGeometry(w * 0.65, 0.08, 0.35), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95 }));
+  pillow.position.set(0, 0.60, -d * 0.3);
+  pillow.castShadow = true;
+  group.add(pillow);
+
   return group;
 }
 
 function buildPatientMonitor(w, h, d) {
   const group = new THREE.Group();
-  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, h - 0.3, 12), new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9 }));
-  pole.position.y = (h - 0.3) / 2;
-  const screen = new THREE.Mesh(new THREE.BoxGeometry(w, 0.3, 0.1), new THREE.MeshStandardMaterial({ color: 0x0f172a, emissive: 0x10b981, emissiveIntensity: 0.4 }));
-  screen.position.set(0, h - 0.15, 0);
-  group.add(pole, screen);
-  return group;
-}
+  const bodyMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3, metalness: 0.1 });
+  const screenMat = new THREE.MeshStandardMaterial({ color: 0x020617, emissive: 0x00f2fe, emissiveIntensity: 0.5 });
+  const standMat = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.9, roughness: 0.2 });
 
-function buildIVStand(w, h, d) {
-  const group = new THREE.Group();
-  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, h, 12), new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.9 }));
-  pole.position.y = h / 2;
-  const bag = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.2, 0.04), new THREE.MeshStandardMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.8 }));
-  bag.position.set(0.1, h - 0.15, 0);
-  group.add(pole, bag);
-  return group;
-}
+  // Rolling Mobile Base
+  const basePole = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, h * 0.8, 16), standMat);
+  basePole.position.y = (h * 0.8) / 2;
+  basePole.castShadow = true;
+  group.add(basePole);
 
-function buildMedTrolley(w, h, d) {
-  const group = new THREE.Group();
-  const steelMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.9, roughness: 0.2 });
-  const t1 = new THREE.Mesh(new THREE.BoxGeometry(w, 0.03, d), steelMat); t1.position.y = h;
-  const t2 = new THREE.Mesh(new THREE.BoxGeometry(w, 0.03, d), steelMat); t2.position.y = h / 2;
-  group.add(t1, t2);
-  return group;
-}
+  // Monitor Chassis (15.6 inch Medical Screen)
+  const monitorBody = new THREE.Mesh(new THREE.BoxGeometry(w, 0.35, 0.08), bodyMat);
+  monitorBody.position.set(0, h * 0.85, 0);
+  monitorBody.castShadow = true;
 
-function buildSurgicalLamp(w, h, d) {
-  const group = new THREE.Group();
-  const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, h, 12), new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8 }));
-  arm.position.y = h / 2;
-  const dome = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.1, 0.15, 24), new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.6 }));
-  dome.position.set(0.3, h, 0);
-  dome.rotation.z = Math.PI;
-  group.add(arm, dome);
-  return group;
-}
+  // Active Neon ECG Graph Screen
+  const screenDisplay = new THREE.Mesh(new THREE.PlaneGeometry(w * 0.88, 0.28), screenMat);
+  screenDisplay.position.set(0, h * 0.85, 0.042);
 
-function buildStretcher(w, h, d) {
-  return buildHospitalBed(w, h * 0.7, d);
-}
+  // Top Alarm Alert LED Strip (Green OK / Red Alert)
+  const alarmLight = new THREE.Mesh(new THREE.BoxGeometry(w * 0.4, 0.02, 0.03), new THREE.MeshStandardMaterial({ color: 0x10b981, emissive: 0x10b981, emissiveIntensity: 0.8 }));
+  alarmLight.position.set(0, h * 0.85 + 0.18, 0);
 
-function buildMedicineCabinet(w, h, d) {
-  const group = new THREE.Group();
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), new THREE.MeshStandardMaterial({ color: 0xf1f5f9, metalness: 0.5, roughness: 0.2 }));
-  frame.position.y = h / 2;
-  const glass = new THREE.Mesh(new THREE.BoxGeometry(w * 0.8, h * 0.8, 0.02), new THREE.MeshStandardMaterial({ color: 0xbae6fd, transparent: true, opacity: 0.6 }));
-  glass.position.set(0, h / 2, d / 2 + 0.01);
-  group.add(frame, glass);
+  group.add(monitorBody, screenDisplay, alarmLight);
   return group;
 }
 
 function buildConveyorBelt(w, h, d) {
   const group = new THREE.Group();
-  const frameMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8 });
-  const beltMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.8 });
+  const industrialMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.8, roughness: 0.3 });
+  const beltRubberMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.95, metalness: 0.05 });
+  const motorMat = new THREE.MeshStandardMaterial({ color: 0x059669, metalness: 0.7, roughness: 0.4 });
+  const estopMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.2, emissive: 0xef4444, emissiveIntensity: 0.3 });
 
-  const bed = new THREE.Mesh(new THREE.BoxGeometry(w, 0.1, d), frameMat);
-  bed.position.y = h - 0.05;
-  const belt = new THREE.Mesh(new THREE.BoxGeometry(w * 0.95, 0.02, d * 0.85), beltMat);
+  // Main Heavy-Duty Structural Bed
+  const bed = new THREE.Mesh(new THREE.BoxGeometry(w, 0.14, d), industrialMat);
+  bed.position.y = h - 0.07;
+  bed.castShadow = true;
+  group.add(bed);
+
+  // Rubber Belt Surface with Side Guide Rails
+  const belt = new THREE.Mesh(new THREE.BoxGeometry(w * 0.98, 0.02, d * 0.8), beltRubberMat);
   belt.position.y = h + 0.01;
-  group.add(bed, belt);
+  belt.receiveShadow = true;
+  group.add(belt);
 
-  [-w/2 + 0.15, w/2 - 0.15].forEach(ox => {
-    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, h - 0.1, 8), frameMat);
-    leg.position.set(ox, (h - 0.1) / 2, 0);
+  // Anodized Aluminum Guide Rails (Thanh Dẫn Hướng)
+  [-d * 0.45, d * 0.45].forEach(gz => {
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(w, 0.05, 0.02), new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.9 }));
+    rail.position.set(0, h + 0.04, gz);
+    group.add(rail);
+  });
+
+  // Structural Support Legs with Adjustable Leveling Feet
+  [-w/2 + 0.2, w/2 - 0.2].forEach(ox => {
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, h - 0.14, d * 0.85), industrialMat);
+    leg.position.set(ox, (h - 0.14) / 2, 0);
+    leg.castShadow = true;
     group.add(leg);
   });
-  return group;
-}
 
-function buildWoodenPallet(w, h, d) {
-  const group = new THREE.Group();
-  const woodMat = new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.8 });
-  const top = new THREE.Mesh(new THREE.BoxGeometry(w, 0.04, d), woodMat);
-  top.position.y = h - 0.02;
-  const bot = new THREE.Mesh(new THREE.BoxGeometry(w, 0.03, d), woodMat);
-  bot.position.y = 0.015;
-  group.add(top, bot);
+  // Electric Motor Gearbox (Động Cơ Kéo)
+  const motor = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.25, 0.25), motorMat);
+  motor.position.set(-w/2 - 0.12, h - 0.1, 0);
+  group.add(motor);
+
+  // Emergency Stop Button (Nút Dừng Khẩn Cấp E-Stop)
+  const estop = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.05, 16), estopMat);
+  estop.position.set(w * 0.35, h + 0.06, d * 0.45);
+  group.add(estop);
+
   return group;
 }
 
 function buildWarehouseRack(w, h, d) {
   const group = new THREE.Group();
-  const orangeMat = new THREE.MeshStandardMaterial({ color: 0xea580c, metalness: 0.6 });
-  const blueMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, metalness: 0.6 });
+  const orangeBeamMat = new THREE.MeshStandardMaterial({ color: 0xf97316, metalness: 0.6, roughness: 0.3 });
+  const blueUprightMat = new THREE.MeshStandardMaterial({ color: 0x1d4ed8, metalness: 0.7, roughness: 0.3 });
+  const shelfMeshMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.2 });
 
+  // 4 Heavy-Duty Perforated Uprights (Cột Chịu Lực Xanh)
   [[-w/2, -d/2], [w/2, -d/2], [-w/2, d/2], [w/2, d/2]].forEach(([ox, oz]) => {
-    const p = new THREE.Mesh(new THREE.BoxGeometry(0.06, h, 0.06), blueMat);
-    p.position.set(ox, h / 2, oz);
-    group.add(p);
+    const post = new THREE.Mesh(new THREE.BoxGeometry(0.08, h, 0.08), blueUprightMat);
+    post.position.set(ox, h / 2, oz);
+    post.castShadow = true;
+    group.add(post);
   });
 
-  [0.8, 1.6, 2.3].forEach(yh => {
-    const beam = new THREE.Mesh(new THREE.BoxGeometry(w, 0.06, d), orangeMat);
-    beam.position.y = yh;
-    group.add(beam);
+  // 3-Tier Shelf Beams & Galvanized Decking Panels (3 Tầng Chứa Hàng)
+  const tiers = [0.6, 1.4, 2.2];
+  tiers.forEach(yh => {
+    if (yh < h) {
+      const beamFront = new THREE.Mesh(new THREE.BoxGeometry(w, 0.08, 0.04), orangeBeamMat);
+      beamFront.position.set(0, yh, d / 2);
+      const beamBack = new THREE.Mesh(new THREE.BoxGeometry(w, 0.08, 0.04), orangeBeamMat);
+      beamBack.position.set(0, yh, -d / 2);
+      const deck = new THREE.Mesh(new THREE.BoxGeometry(w - 0.08, 0.02, d - 0.08), shelfMeshMat);
+      deck.position.set(0, yh + 0.03, 0);
+      group.add(beamFront, beamBack, deck);
+    }
   });
+
   return group;
 }
 

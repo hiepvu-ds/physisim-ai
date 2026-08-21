@@ -28,26 +28,45 @@ function initViewport() {
   camera.position.set(2.5, 2.2, 3.2);
   camera.lookAt(0, 0.8, 0);
 
-  // Renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  // Renderer (Ultra Realistic PBR Configuration)
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
+  if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
   container.appendChild(renderer.domElement);
 
-  // Lights
-  const ambient = new THREE.AmbientLight(0x1a2040, 3);
+  // Studio Lighting (Multi-source High-Fidelity Rig)
+  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
   scene.add(ambient);
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-  dirLight.position.set(5, 10, 7);
+  // Key Directional Sun/Ceiling Light with Crisp Shadows
+  const dirLight = new THREE.DirectionalLight(0xfff5ea, 1.6);
+  dirLight.position.set(6, 12, 8);
   dirLight.castShadow = true;
+  dirLight.shadow.mapSize.width = 2048;
+  dirLight.shadow.mapSize.height = 2048;
+  dirLight.shadow.camera.near = 0.5;
+  dirLight.shadow.camera.far = 30;
+  dirLight.shadow.camera.left = -6;
+  dirLight.shadow.camera.right = 6;
+  dirLight.shadow.camera.top = 6;
+  dirLight.shadow.camera.bottom = -6;
+  dirLight.shadow.bias = -0.0005;
   scene.add(dirLight);
 
-  const pointLight1 = new THREE.PointLight(0x00f2fe, 2, 8);
-  pointLight1.position.set(0, 3, 0);
-  scene.add(pointLight1);
+  // Fill Light (Cool Cyan Tone for Metallic Highlights)
+  const fillLight = new THREE.DirectionalLight(0x38bdf8, 0.7);
+  fillLight.position.set(-6, 6, -6);
+  scene.add(fillLight);
+
+  // Studio Overhead Rim Point Light
+  const rimLight = new THREE.PointLight(0x00f2fe, 1.2, 12);
+  rimLight.position.set(0, 4.5, 0);
+  scene.add(rimLight);
 
   // Grid
   const gridHelper = new THREE.GridHelper(12, 24, 0x00f2fe, 0x1e293b);
